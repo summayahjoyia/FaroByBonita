@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Color state list for bottom navigation icons and labels.
+    Place this file at: res/color/bottom_nav_color_state.xml
+
+    Selected state  → black  (adapts automatically via night mode colors.xml)
+    Default state   → grey
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:color="@color/black"
+        android:state_checked="true" />
+    <item
+        android:color="@color/grey" />
+</selector>
