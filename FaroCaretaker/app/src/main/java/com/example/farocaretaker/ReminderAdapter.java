@@ -11,21 +11,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder> {
 
-    public interface OnToggleListener {
-        void onToggle(Reminder reminder);
-    }
+    public interface OnToggleListener { void onToggle(Reminder reminder); }
+    public interface OnClickListener  { void onClick(Reminder reminder); }
 
     private final List<Reminder>   reminderList;
     private final OnToggleListener toggleListener;
+    private final OnClickListener  clickListener;
 
-    public ReminderAdapter(List<Reminder> reminderList, OnToggleListener toggleListener) {
+    public ReminderAdapter(List<Reminder> reminderList,
+                           OnToggleListener toggleListener,
+                           OnClickListener clickListener) {
         this.reminderList   = reminderList;
         this.toggleListener = toggleListener;
+        this.clickListener  = clickListener;
     }
 
     @NonNull
@@ -44,11 +46,13 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
         holder.textTime.setText(r.getTime() != null ? r.getTime() : "—");
         holder.textFrequency.setText(r.getFrequency() != null ? r.getFrequency() : "—");
 
-        // Set switch without triggering listener
         holder.switchActive.setOnCheckedChangeListener(null);
         holder.switchActive.setChecked(r.isActive());
         holder.switchActive.setOnCheckedChangeListener((btn, isChecked) ->
                 toggleListener.onToggle(r));
+
+        // Whole card click opens delete sheet
+        holder.itemView.setOnClickListener(v -> clickListener.onClick(r));
     }
 
     @Override
@@ -60,9 +64,8 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
         notifyDataSetChanged();
     }
 
-    // ── ViewHolder ─────────────────────────────────────────────────────────
     public static class ReminderViewHolder extends RecyclerView.ViewHolder {
-        TextView     textMedicineName, textTime, textFrequency;
+        TextView       textMedicineName, textTime, textFrequency;
         MaterialSwitch switchActive;
 
         public ReminderViewHolder(@NonNull View itemView) {

@@ -3,6 +3,7 @@
 
 package com.example.farocaretaker;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,9 +31,12 @@ public class AddReminderFragment extends Fragment {
     private static final String DB_URL = "https://farobybonita-default-rtdb.firebaseio.com/";
 
     // ── Views ──────────────────────────────────────────────────────────────
-    private EditText       etMedicineName, etTime, etFrequency;
-    private MaterialButton btnSave;
-    private TextView       tvError;
+    private EditText       etMedicineName, etFrequency;
+    private MaterialButton btnPickTime, btnSave;
+    private TextView       tvSelectedTime, tvError;
+
+    // ── State ──────────────────────────────────────────────────────────────
+    private String selectedTime = null; // e.g. "2:30 PM"
 
     // ── Firebase ───────────────────────────────────────────────────────────
     private FirebaseDatabase  rtdb;
@@ -55,17 +60,42 @@ public class AddReminderFragment extends Fragment {
         mAuth     = FirebaseAuth.getInstance();
 
         etMedicineName = view.findViewById(R.id.et_medicine_name);
-        etTime         = view.findViewById(R.id.et_time);
         etFrequency    = view.findViewById(R.id.et_frequency);
+        btnPickTime    = view.findViewById(R.id.btn_pick_time);
+        tvSelectedTime = view.findViewById(R.id.tv_selected_time);
         btnSave        = view.findViewById(R.id.btn_save_reminder);
         tvError        = view.findViewById(R.id.tv_add_reminder_error);
 
+        btnPickTime.setOnClickListener(v -> showTimePicker());
         btnSave.setOnClickListener(v -> attemptSave());
     }
 
+    // ── Time Picker ────────────────────────────────────────────────────────
+    private void showTimePicker() {
+        Calendar cal  = Calendar.getInstance();
+        int hour      = cal.get(Calendar.HOUR_OF_DAY);
+        int minute    = cal.get(Calendar.MINUTE);
+
+        // false = 12-hour format with AM/PM
+        TimePickerDialog picker = new TimePickerDialog(requireContext(),
+                (view, hourOfDay, minuteOfDay) -> {
+                    String amPm   = hourOfDay < 12 ? "AM" : "PM";
+                    int hour12    = hourOfDay % 12;
+                    if (hour12 == 0) hour12 = 12;
+                    String time   = String.format("%d:%02d %s", hour12, minuteOfDay, amPm);
+                    selectedTime  = time;
+                    tvSelectedTime.setText(time);
+                    tvSelectedTime.setVisibility(View.VISIBLE);
+                    btnPickTime.setText(time);
+                },
+                hour, minute, false); // false = 12-hour AM/PM
+
+        picker.show();
+    }
+
+    // ── Save ───────────────────────────────────────────────────────────────
     private void attemptSave() {
         String medicine  = etMedicineName.getText().toString().trim();
-        String time      = etTime.getText().toString().trim();
         String frequency = etFrequency.getText().toString().trim();
 
         if (TextUtils.isEmpty(medicine)) {
@@ -73,8 +103,8 @@ public class AddReminderFragment extends Fragment {
             tvError.setVisibility(View.VISIBLE);
             return;
         }
-        if (TextUtils.isEmpty(time)) {
-            tvError.setText("Time is required (e.g. 14:00)");
+        if (selectedTime == null) {
+            tvError.setText("Please pick a time");
             tvError.setVisibility(View.VISIBLE);
             return;
         }
@@ -82,7 +112,6 @@ public class AddReminderFragment extends Fragment {
         tvError.setVisibility(View.GONE);
         btnSave.setEnabled(false);
 
-        // Get deviceId from Firestore first
         if (mAuth.getCurrentUser() == null) return;
         String uid = mAuth.getCurrentUser().getUid();
 
@@ -100,7 +129,7 @@ public class AddReminderFragment extends Fragment {
                         Log.e(TAG, "No deviceId found");
                         return;
                     }
-                    saveToRTDB(deviceId, medicine, time,
+                    saveToRTDB(deviceId, medicine, selectedTime,
                             TextUtils.isEmpty(frequency) ? "daily" : frequency);
                 });
     }
@@ -114,11 +143,10 @@ public class AddReminderFragment extends Fragment {
 
         rtdb.getReference("reminders")
                 .child(deviceId)
-                .push() // auto-generate ID
+                .push()
                 .setValue(reminder)
                 .addOnSuccessListener(unused -> {
-                    Log.d(TAG, "Reminder saved");
-                    // Go back to ReminderFragment
+                    Log.d(TAG, "Reminder saved: " + medicine + " at " + time);
                     requireActivity().getSupportFragmentManager().popBackStack();
                 })
                 .addOnFailureListener(e -> {

@@ -31,23 +31,19 @@ public class ReminderFragment extends Fragment {
     private static final String TAG    = "ReminderFragment";
     private static final String DB_URL = "https://farobybonita-default-rtdb.firebaseio.com/";
 
-    // ── Views ──────────────────────────────────────────────────────────────
     private RecyclerView         recyclerView;
     private ReminderAdapter      adapter;
     private FloatingActionButton fabAddReminder;
 
-    // ── State ──────────────────────────────────────────────────────────────
     private final List<Reminder> reminderList     = new ArrayList<>();
     private String               currentDeviceId  = null;
     private ValueEventListener   reminderListener = null;
     private DatabaseReference    remindersRef     = null;
 
-    // ── Firebase ───────────────────────────────────────────────────────────
     private FirebaseDatabase  rtdb;
     private FirebaseFirestore firestore;
     private FirebaseAuth      mAuth;
 
-    // ── Lifecycle ──────────────────────────────────────────────────────────
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -67,7 +63,11 @@ public class ReminderFragment extends Fragment {
         recyclerView   = view.findViewById(R.id.recyclerViewReminders);
         fabAddReminder = view.findViewById(R.id.fabAddReminder);
 
-        adapter = new ReminderAdapter(reminderList, this::onReminderToggle);
+        adapter = new ReminderAdapter(
+                reminderList,
+                this::onReminderToggle,
+                this::onReminderClick    // click opens delete sheet
+        );
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
@@ -90,12 +90,8 @@ public class ReminderFragment extends Fragment {
         }
     }
 
-    // ── Load deviceId from Firestore first ────────────────────────────────
     private void loadDeviceIdThenReminders() {
-        if (mAuth.getCurrentUser() == null) {
-            Log.e(TAG, "User is null");
-            return;
-        }
+        if (mAuth.getCurrentUser() == null) { Log.e(TAG, "User is null"); return; }
         String uid = mAuth.getCurrentUser().getUid();
 
         firestore.collection("caregivers")
@@ -104,10 +100,7 @@ public class ReminderFragment extends Fragment {
                 .limit(1)
                 .get()
                 .addOnSuccessListener(query -> {
-                    if (query.isEmpty()) {
-                        Log.d(TAG, "No dependents found");
-                        return;
-                    }
+                    if (query.isEmpty()) { Log.d(TAG, "No dependents"); return; }
                     QueryDocumentSnapshot doc =
                             (QueryDocumentSnapshot) query.getDocuments().get(0);
                     String deviceId = doc.getString("deviceId");
@@ -121,7 +114,6 @@ public class ReminderFragment extends Fragment {
                 .addOnFailureListener(e -> Log.e(TAG, "Firestore error: " + e.getMessage()));
     }
 
-    // ── Realtime Database listener ─────────────────────────────────────────
     private void listenToReminders(String deviceId) {
         remindersRef     = rtdb.getReference("reminders").child(deviceId);
         reminderListener = new ValueEventListener() {
@@ -141,7 +133,6 @@ public class ReminderFragment extends Fragment {
                 Log.d(TAG, "Loaded " + fresh.size() + " reminders");
                 adapter.updateList(fresh);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, "RTDB error: " + error.getMessage());
@@ -150,7 +141,6 @@ public class ReminderFragment extends Fragment {
         remindersRef.addValueEventListener(reminderListener);
     }
 
-    // ── Toggle active state from adapter callback ─────────────────────────
     private void onReminderToggle(Reminder reminder) {
         if (currentDeviceId == null) return;
         rtdb.getReference("reminders")
@@ -158,5 +148,14 @@ public class ReminderFragment extends Fragment {
                 .child(reminder.getId())
                 .child("active")
                 .setValue(!reminder.isActive());
+    }
+
+    // ── On card click — open delete bottom sheet ───────────────────────────
+    private void onReminderClick(Reminder reminder) {
+        DeleteReminderFragment.newInstance(
+                reminder.getId(),
+                reminder.getMedicineName(),
+                currentDeviceId
+        ).show(getParentFragmentManager(), "delete_reminder");
     }
 }
