@@ -21,4 +21,34 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
     }
+
+    private void fadeIn(View view) {
+        ObjectAnimator anim = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
+        anim.setDuration(1500);
+        anim.start();
+    }
+
+    private void fadeOut(View view) {
+        ObjectAnimator anim = ObjectAnimator.ofFloat(view, "alpha", 1f, 0f);
+        anim.setDuration(1500);
+        anim.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Prevent exiting
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        clockHandler.removeCallbacksAndMessages(null);
+        visitorHandler.removeCallbacksAndMessages(null);
+        if (deviceRef != null && deviceListener != null) {
+            deviceRef.removeEventListener(deviceListener);
+        }
+        if (visitorsRef != null && visitorsListener != null) {
+            visitorsRef.removeEventListener(visitorsListener);
+        }
+    }
 }
