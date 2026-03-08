@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    res/values/themes.xml  (light mode)
-    Night mode overrides go in res/values-night/themes.xml
+    res/values/themes.xml
 -->
 <resources>
 
-    <!-- Base theme: Material3 DayNight handles automatic dark/light switching -->
     <style name="Base.Theme.FaroCaretaker" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/black</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -16,17 +14,14 @@
         <item name="android:navigationBarColor">@color/white</item>
     </style>
 
-    <!-- Main app theme -->
     <style name="Theme.FaroCaretaker" parent="Base.Theme.FaroCaretaker" />
 
-    <!-- Splash theme: plain white, no action bar -->
-    <style name="Theme.FaroCaretaker.Splash" parent="Theme.FaroCaretaker">
-        <item name="android:windowBackground">@color/white</item>
-        <item name="android:statusBarColor">@color/white</item>
-        <item name="android:navigationBarColor">@color/white</item>
+    <style name="Theme.FaroCaretaker.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="postSplashScreenTheme">@style/Theme.FaroCaretaker</item>
     </style>
 
-    <!-- Toolbar title style -->
+    <!-- Toolbar title -->
     <style name="ToolbarTitleStyle" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">18sp</item>
@@ -34,15 +29,25 @@
         <item name="android:letterSpacing">0.02</item>
     </style>
 
-    <!-- Bottom nav active indicator pill -->
-    <style name="BottomNavIndicatorStyle">
+    <!--
+        Bottom nav indicator: let Material3 handle centering naturally.
+        Only override color and corner shape — do NOT set android:gravity here.
+    -->
+    <style name="BottomNavIndicatorStyle" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@color/grey</item>
         <item name="shapeAppearance">@style/BottomNavIndicatorShape</item>
     </style>
 
-    <style name="BottomNavIndicatorShape" parent="">
+    <style name="BottomNavIndicatorShape" parent="ShapeAppearance.Material3.Corner.Full">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- Tab text style for HomeFragment TabLayout -->
+    <style name="TabTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">13sp</item>
+        <item name="textAllCaps">false</item>
     </style>
 
 </resources>

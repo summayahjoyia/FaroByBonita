@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    res/values-night/themes.xml  (dark mode overrides)
-    Android automatically uses this file when the device is in dark mode.
-    Colors resolve from res/values-night/colors.xml automatically.
+    res/values-night/themes.xml
 -->
 <resources>
 
@@ -16,14 +14,21 @@
         <item name="android:navigationBarColor">@color/white</item>
     </style>
 
-    <!-- Main app theme -->
     <style name="Theme.FaroCaretaker" parent="Base.Theme.FaroCaretaker" />
 
-    <!-- Splash theme -->
-    <style name="Theme.FaroCaretaker.Splash" parent="Theme.FaroCaretaker">
-        <item name="android:windowBackground">@color/white</item>
-        <item name="android:statusBarColor">@color/white</item>
-        <item name="android:navigationBarColor">@color/white</item>
+    <style name="Theme.FaroCaretaker.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="postSplashScreenTheme">@style/Theme.FaroCaretaker</item>
+    </style>
+
+    <style name="BottomNavIndicatorStyle" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/grey</item>
+        <item name="shapeAppearance">@style/BottomNavIndicatorShape</item>
+    </style>
+
+    <style name="BottomNavIndicatorShape" parent="ShapeAppearance.Material3.Corner.Full">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
 </resources>

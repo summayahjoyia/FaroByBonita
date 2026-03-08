@@ -130,6 +130,7 @@ public class DependentFragment extends Fragment {
         dependent.put("name", name);
         dependent.put("relationship", relationship);
         dependent.put("caregiverId", uid);
+        dependent.put("deviceId", "phone1"); // ← add this
         dependent.put("createdAt", System.currentTimeMillis());
 
         // Store under caregivers/{uid}/dependents/{auto-id}

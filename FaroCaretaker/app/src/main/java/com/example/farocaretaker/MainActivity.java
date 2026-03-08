@@ -19,31 +19,38 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNav = findViewById(R.id.bottom_nav);
 
-        // Load home fragment on first create
         if (savedInstanceState == null) {
             loadFragment(new HomeFragment());
             bottomNav.setSelectedItemId(R.id.nav_home);
         }
 
         bottomNav.setOnItemSelectedListener(item -> {
-            Fragment selected = null;
-
             int id = item.getItemId();
-            if (id == R.id.nav_home) {
-                selected = new HomeFragment();
-            } else if (id == R.id.nav_reminder) {
-                selected = new ReminderFragment();
-            } else if (id == R.id.nav_edit) {
-                selected = new EditToolsFragment();
-            } else if (id == R.id.nav_profile) {
-                selected = new ProfileFragment();
-            }
 
-            if (selected != null) {
-                loadFragment(selected);
+            if (id == R.id.nav_home) {
+                loadFragment(new HomeFragment());
+                return true;
+            } else if (id == R.id.nav_reminder) {
+                loadFragment(new ReminderFragment());
+                return true;
+            } else if (id == R.id.nav_edit) {
+                loadFragment(new EditToolsFragment());
+                return true;
+            } else if (id == R.id.nav_profile) {
+                // Show as floating bottom sheet, don't replace fragment
+                new ProfileFragment()
+                        .show(getSupportFragmentManager(), "profile");
                 return true;
             }
+
             return false;
         });
+    }
+
+    private void loadFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
     }
 }

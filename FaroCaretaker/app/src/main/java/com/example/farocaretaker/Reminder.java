@@ -1,30 +1,29 @@
-package com.example.farocaretaker; // change this to match your actual package name
+// Reminder.java
+// Place at: java/com/example/farocaretaker/Reminder.java
+
+package com.example.farocaretaker;
 
 public class Reminder {
 
-    private String id;
-    private String medicineName;
-    private String time;
-    private String frequency;
+    private String  id;
+    private String  medicineName;  // maps to medicine_name in RTDB
+    private String  time;          // e.g. "14:00"
+    private String  frequency;     // e.g. "daily"
+    private boolean active;
 
-    // Empty constructor required by Firebase
-    public Reminder() {}
+    public Reminder() {} // required for Firebase
 
-    public Reminder(String medicineName, String time, String frequency) {
-        this.medicineName = medicineName;
-        this.time = time;
-        this.frequency = frequency;
-    }
+    // ── Getters ────────────────────────────────────────────────────────────
+    public String  getId()           { return id; }
+    public String  getMedicineName() { return medicineName; }
+    public String  getTime()         { return time; }
+    public String  getFrequency()    { return frequency; }
+    public boolean isActive()        { return active; }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-
-    public String getMedicineName() { return medicineName; }
+    // ── Setters ────────────────────────────────────────────────────────────
+    public void setId(String id)                   { this.id = id; }
     public void setMedicineName(String medicineName) { this.medicineName = medicineName; }
-
-    public String getTime() { return time; }
-    public void setTime(String time) { this.time = time; }
-
-    public String getFrequency() { return frequency; }
-    public void setFrequency(String frequency) { this.frequency = frequency; }
+    public void setTime(String time)               { this.time = time; }
+    public void setFrequency(String frequency)     { this.frequency = frequency; }
+    public void setActive(boolean active)          { this.active = active; }
 }

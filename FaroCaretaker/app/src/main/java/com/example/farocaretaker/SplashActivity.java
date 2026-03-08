@@ -9,6 +9,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -16,12 +18,15 @@ public class SplashActivity extends AppCompatActivity {
     private static final long HOLD_DURATION = 900L;
     private static final long TAGLINE_DELAY = 200L;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.installSplashScreen(this);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        mAuth = FirebaseAuth.getInstance();
 
         TextView tvAppName = findViewById(R.id.tv_app_name);
         TextView tvTagline = findViewById(R.id.tv_tagline);
@@ -47,16 +52,12 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void route() {
-        // TODO: restore Firebase auth check when registration is fixed:
-        //
-        // FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        // if (user != null) {
-        //     startActivity(new Intent(this, MainActivity.class));
-        // } else {
-        //     startActivity(new Intent(this, LoginActivity.class));
-        // }
-
-        startActivity(new Intent(this, MainActivity.class));
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            startActivity(new Intent(this, MainActivity.class));
+        } else {
+            startActivity(new Intent(this, LoginActivity.class));
+        }
         finish();
     }
 }
