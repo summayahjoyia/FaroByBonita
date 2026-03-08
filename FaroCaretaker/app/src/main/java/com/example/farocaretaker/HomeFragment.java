@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class HomeFragment extends Fragment {
 
-    private static final String DB_URL = "https://farobybonita-default-rtdb.firebaseio.com/";
+    private static final String DB_URL   = "https://farobybonita-default-rtdb.firebaseio.com/";
     private static final String DEVICE_ID = "phone1";
 
     private TextView          tvNoReminder, tvReminderMedicine, tvReminderTime;
@@ -30,6 +31,7 @@ public class HomeFragment extends Fragment {
     private LinearLayout      llReminderContent;
     private TextInputEditText etDisplayMessage;
     private MaterialButton    btnClearMessage;
+    private MaterialButton    btnMarkHome;
 
     private ValueEventListener reminderListener = null;
     private ValueEventListener messageListener  = null;
@@ -78,6 +80,7 @@ public class HomeFragment extends Fragment {
         btnClearMessage         = view.findViewById(R.id.btn_clear_message);
         tvDependentName         = view.findViewById(R.id.tv_dependent_name);
         tvDependentRelationship = view.findViewById(R.id.tv_dependent_relationship);
+        btnMarkHome             = view.findViewById(R.id.btn_mark_home);
     }
 
     private void attachMessageListener() {
@@ -142,6 +145,18 @@ public class HomeFragment extends Fragment {
         btnClearMessage.setOnClickListener(v -> {
             etDisplayMessage.setText("");
             saveMessage("");
+        });
+
+        btnMarkHome.setOnClickListener(v -> {
+            rtdb.getReference("visitors")
+                    .child(DEVICE_ID)
+                    .child("visitor1")
+                    .child("active")
+                    .setValue(true)
+                    .addOnSuccessListener(unused ->
+                            Toast.makeText(requireContext(), "Marked as home!", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e ->
+                            Toast.makeText(requireContext(), "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         });
     }
 
