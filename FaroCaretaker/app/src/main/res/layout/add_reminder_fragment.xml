@@ -1,49 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<!-- res/layout/add_reminder_fragment.xml -->
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:background="@color/light_grey"
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Reminder"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"/>
-
-    <com.google.android.material.textfield.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Medicine Name"
-        android:layout_marginBottom="16dp">
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="40dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editMedicineName"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Reminder"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="0dp">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
 
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:timePickerMode="spinner"
-        android:layout_marginBottom="16dp"/>
+                <!-- Medicine name -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medicine Name"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.08"
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="6dp" />
 
-    <Spinner
-        android:id="@+id/spinnerFrequency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"/>
+                <EditText
+                    android:id="@+id/et_medicine_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="e.g. Aspirin"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/grey"
+                    android:background="@null"
+                    android:inputType="textCapWords"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="16dp" />
 
-    <Button
-        android:id="@+id/buttonSaveReminder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save Reminder"/>
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/grey"
+                    android:layout_marginBottom="16dp" />
 
-</LinearLayout>
+                <!-- Time -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.08"
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="6dp" />
+
+                <EditText
+                    android:id="@+id/et_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="e.g. 14:00"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/grey"
+                    android:background="@null"
+                    android:inputType="time"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/grey"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Frequency -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Frequency"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.08"
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="6dp" />
+
+                <EditText
+                    android:id="@+id/et_frequency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="e.g. daily, twice daily"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/grey"
+                    android:background="@null"
+                    android:inputType="textCapSentences"
+                    android:paddingBottom="8dp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Error -->
+        <TextView
+            android:id="@+id/tv_add_reminder_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#D93025"
+            android:textSize="13sp"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone" />
+
+        <!-- Save button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save_reminder"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Save Reminder"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:backgroundTint="@color/black"
+            app:cornerRadius="12dp"
+            app:elevation="0dp" />
+
+    </LinearLayout>
+</ScrollView>
