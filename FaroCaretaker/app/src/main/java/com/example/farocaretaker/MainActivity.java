@@ -46,11 +46,4 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
     }
-
-    private void loadFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
-    }
 }
