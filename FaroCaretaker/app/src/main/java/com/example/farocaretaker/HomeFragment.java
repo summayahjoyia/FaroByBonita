@@ -83,6 +83,7 @@ public class HomeFragment extends Fragment {
 
     // ── Bind ───────────────────────────────────────────────────────────────
     private void bindViews(View view) {
+        tabLayoutDependents     = view.findViewById(R.id.tab_layout_dependents);
         tvNoReminder            = view.findViewById(R.id.tv_no_reminder);
         llReminderContent       = view.findViewById(R.id.ll_reminder_content);
         tvReminderMedicine      = view.findViewById(R.id.tv_reminder_medicine);
