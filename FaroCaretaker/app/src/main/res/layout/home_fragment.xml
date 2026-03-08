@@ -275,7 +275,12 @@
                         android:layout_width="8dp"
                         android:layout_height="8dp"
                         android:background="@drawable/bg_status_dot" />
-
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_mark_home"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mark as Home"
+                        android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
