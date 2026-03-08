@@ -1,5 +1,4 @@
-Colours.xml values light
-    <?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#1D1D1F</color>
     <color name="white">#FFFFFF</color>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Login Activity host layout
+    res/layout/activity_login.xml
+    Used by: LoginActivity.java
+    Only contains the fragment container — all UI is in login_fragment.xml
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/login_fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" />
