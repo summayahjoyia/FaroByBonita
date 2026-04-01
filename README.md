@@ -1,4 +1,5 @@
 # FaroByBonita
+https://devpost.com/software/faro-ch0i9s
 ## Inspiration
 
 People with dementia often struggle to recognize familiar faces and feel safe in their own home. Caregivers already carry a demanding routine, and making continuous reassuring reminders adds to that load. When someone with dementia feels lost or confused, it creates real fear and anxiety.
