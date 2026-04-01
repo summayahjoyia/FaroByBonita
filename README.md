@@ -22,7 +22,6 @@ The caregiver app gives full control over what the person with dementia sees, wi
 
 * Set a live display message that updates on the tablet in real time, like "Roast for dinner tonight!"
 * Schedule medicine reminders with a name, time, and frequency
-* Add visitor profiles with a photo and Bluetooth ID so the tablet knows when someone arrives
 * Manage multiple dependents from one account
 * Toggle dark mode and location settings from the edit page
 
